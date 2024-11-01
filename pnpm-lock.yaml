@@ -10,13 +10,13 @@ importers:
     devDependencies:
       '@sveltejs/adapter-auto':
         specifier: ^3.0.0
-        version: 3.3.1(@sveltejs/kit@2.7.3(@sveltejs/vite-plugin-svelte@4.0.0(svelte@5.1.3)(vite@5.4.10))(svelte@5.1.3)(vite@5.4.10))
+        version: 3.3.1(@sveltejs/kit@2.7.3(@sveltejs/vite-plugin-svelte@4.0.0(svelte@5.1.3)(vite@5.4.10(@types/node@22.8.6)))(svelte@5.1.3)(vite@5.4.10(@types/node@22.8.6)))
       '@sveltejs/kit':
         specifier: ^2.0.0
-        version: 2.7.3(@sveltejs/vite-plugin-svelte@4.0.0(svelte@5.1.3)(vite@5.4.10))(svelte@5.1.3)(vite@5.4.10)
+        version: 2.7.3(@sveltejs/vite-plugin-svelte@4.0.0(svelte@5.1.3)(vite@5.4.10(@types/node@22.8.6)))(svelte@5.1.3)(vite@5.4.10(@types/node@22.8.6))
       '@sveltejs/vite-plugin-svelte':
         specifier: ^4.0.0
-        version: 4.0.0(svelte@5.1.3)(vite@5.4.10)
+        version: 4.0.0(svelte@5.1.3)(vite@5.4.10(@types/node@22.8.6))
       '@turf/center':
         specifier: ^7.1.0
         version: 7.1.0
@@ -26,6 +26,9 @@ importers:
       '@types/geojson':
         specifier: ^7946.0.14
         version: 7946.0.14
+      '@types/papaparse':
+        specifier: ^5.3.15
+        version: 5.3.15
       autoprefixer:
         specifier: ^10.4.20
         version: 10.4.20(postcss@8.4.47)
@@ -44,6 +47,9 @@ importers:
       maplibre-gl:
         specifier: ^4.7.1
         version: 4.7.1
+      papaparse:
+        specifier: ^5.4.1
+        version: 5.4.1
       prettier:
         specifier: ^3.3.2
         version: 3.3.3
@@ -70,7 +76,7 @@ importers:
         version: 8.11.0(eslint@9.13.0(jiti@1.21.6))(typescript@5.6.3)
       vite:
         specifier: ^5.0.3
-        version: 5.4.10
+        version: 5.4.10(@types/node@22.8.6)
 
 packages:
 
@@ -488,6 +494,12 @@ packages:
 
   '@types/mapbox__vector-tile@1.3.4':
     resolution: {integrity: sha512-bpd8dRn9pr6xKvuEBQup8pwQfD4VUyqO/2deGjfpe6AwC8YRlyEipvefyRJUSiCJTZuCb8Pl1ciVV5ekqJ96Bg==}
+
+  '@types/node@22.8.6':
+    resolution: {integrity: sha512-tosuJYKrIqjQIlVCM4PEGxOmyg3FCPa/fViuJChnGeEIhjA46oy8FMVoF9su1/v8PNs2a8Q0iFNyOx0uOF91nw==}
+
+  '@types/papaparse@5.3.15':
+    resolution: {integrity: sha512-JHe6vF6x/8Z85nCX4yFdDslN11d+1pr12E526X8WAfhadOeaOTx5AuIkvDKIBopfvlzpzkdMx4YyvSKCM9oqtw==}
 
   '@types/pbf@3.0.5':
     resolution: {integrity: sha512-j3pOPiEcWZ34R6a6mN07mUkM4o4Lwf6hPNt8eilOeZhTFbxFXmKhvXl9Y28jotFPaI1bpPDJsbCprUoNke6OrA==}
@@ -1138,6 +1150,9 @@ packages:
   package-json-from-dist@1.0.1:
     resolution: {integrity: sha512-UEZIS3/by4OC8vL3P2dTXRETpebLI2NiI5vIrjaD/5UtrkFX/tNbwjTSRAGC/+7CAo2pIcBaRgWmcBBHcsaCIw==}
 
+  papaparse@5.4.1:
+    resolution: {integrity: sha512-HipMsgJkZu8br23pW15uvo6sib6wne/4woLZPlFf3rpDyMe9ywEXUsuD7+6K9PRkJlVT51j/sCOYDKGGS3ZJrw==}
+
   parent-module@1.0.1:
     resolution: {integrity: sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g==}
     engines: {node: '>=6'}
@@ -1515,6 +1530,9 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
+  undici-types@6.19.8:
+    resolution: {integrity: sha512-ve2KP6f/JnbPBFyobGHuerC9g1FYGn/F8n1LWTwNxCEzd6IfqTwUQcNXgEtmmQ6DlRrC1hrSrBnCZPokRrDHjw==}
+
   update-browserslist-db@1.1.1:
     resolution: {integrity: sha512-R8UzCaa9Az+38REPiJ1tXlImTJXlVfgHZsglwBD/k6nj76ctsH1E3q4doGrukiLQd3sGQYu56r5+lo5r94l29A==}
     hasBin: true
@@ -1858,14 +1876,14 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.24.1':
     optional: true
 
-  '@sveltejs/adapter-auto@3.3.1(@sveltejs/kit@2.7.3(@sveltejs/vite-plugin-svelte@4.0.0(svelte@5.1.3)(vite@5.4.10))(svelte@5.1.3)(vite@5.4.10))':
+  '@sveltejs/adapter-auto@3.3.1(@sveltejs/kit@2.7.3(@sveltejs/vite-plugin-svelte@4.0.0(svelte@5.1.3)(vite@5.4.10(@types/node@22.8.6)))(svelte@5.1.3)(vite@5.4.10(@types/node@22.8.6)))':
     dependencies:
-      '@sveltejs/kit': 2.7.3(@sveltejs/vite-plugin-svelte@4.0.0(svelte@5.1.3)(vite@5.4.10))(svelte@5.1.3)(vite@5.4.10)
+      '@sveltejs/kit': 2.7.3(@sveltejs/vite-plugin-svelte@4.0.0(svelte@5.1.3)(vite@5.4.10(@types/node@22.8.6)))(svelte@5.1.3)(vite@5.4.10(@types/node@22.8.6))
       import-meta-resolve: 4.1.0
 
-  '@sveltejs/kit@2.7.3(@sveltejs/vite-plugin-svelte@4.0.0(svelte@5.1.3)(vite@5.4.10))(svelte@5.1.3)(vite@5.4.10)':
+  '@sveltejs/kit@2.7.3(@sveltejs/vite-plugin-svelte@4.0.0(svelte@5.1.3)(vite@5.4.10(@types/node@22.8.6)))(svelte@5.1.3)(vite@5.4.10(@types/node@22.8.6))':
     dependencies:
-      '@sveltejs/vite-plugin-svelte': 4.0.0(svelte@5.1.3)(vite@5.4.10)
+      '@sveltejs/vite-plugin-svelte': 4.0.0(svelte@5.1.3)(vite@5.4.10(@types/node@22.8.6))
       '@types/cookie': 0.6.0
       cookie: 0.6.0
       devalue: 5.1.1
@@ -1879,27 +1897,27 @@ snapshots:
       sirv: 3.0.0
       svelte: 5.1.3
       tiny-glob: 0.2.9
-      vite: 5.4.10
+      vite: 5.4.10(@types/node@22.8.6)
 
-  '@sveltejs/vite-plugin-svelte-inspector@3.0.1(@sveltejs/vite-plugin-svelte@4.0.0(svelte@5.1.3)(vite@5.4.10))(svelte@5.1.3)(vite@5.4.10)':
+  '@sveltejs/vite-plugin-svelte-inspector@3.0.1(@sveltejs/vite-plugin-svelte@4.0.0(svelte@5.1.3)(vite@5.4.10(@types/node@22.8.6)))(svelte@5.1.3)(vite@5.4.10(@types/node@22.8.6))':
     dependencies:
-      '@sveltejs/vite-plugin-svelte': 4.0.0(svelte@5.1.3)(vite@5.4.10)
+      '@sveltejs/vite-plugin-svelte': 4.0.0(svelte@5.1.3)(vite@5.4.10(@types/node@22.8.6))
       debug: 4.3.7
       svelte: 5.1.3
-      vite: 5.4.10
+      vite: 5.4.10(@types/node@22.8.6)
     transitivePeerDependencies:
       - supports-color
 
-  '@sveltejs/vite-plugin-svelte@4.0.0(svelte@5.1.3)(vite@5.4.10)':
+  '@sveltejs/vite-plugin-svelte@4.0.0(svelte@5.1.3)(vite@5.4.10(@types/node@22.8.6))':
     dependencies:
-      '@sveltejs/vite-plugin-svelte-inspector': 3.0.1(@sveltejs/vite-plugin-svelte@4.0.0(svelte@5.1.3)(vite@5.4.10))(svelte@5.1.3)(vite@5.4.10)
+      '@sveltejs/vite-plugin-svelte-inspector': 3.0.1(@sveltejs/vite-plugin-svelte@4.0.0(svelte@5.1.3)(vite@5.4.10(@types/node@22.8.6)))(svelte@5.1.3)(vite@5.4.10(@types/node@22.8.6))
       debug: 4.3.7
       deepmerge: 4.3.1
       kleur: 4.1.5
       magic-string: 0.30.12
       svelte: 5.1.3
-      vite: 5.4.10
-      vitefu: 1.0.3(vite@5.4.10)
+      vite: 5.4.10(@types/node@22.8.6)
+      vitefu: 1.0.3(vite@5.4.10(@types/node@22.8.6))
     transitivePeerDependencies:
       - supports-color
 
@@ -1951,6 +1969,14 @@ snapshots:
       '@types/geojson': 7946.0.14
       '@types/mapbox__point-geometry': 0.1.4
       '@types/pbf': 3.0.5
+
+  '@types/node@22.8.6':
+    dependencies:
+      undici-types: 6.19.8
+
+  '@types/papaparse@5.3.15':
+    dependencies:
+      '@types/node': 22.8.6
 
   '@types/pbf@3.0.5': {}
 
@@ -2621,6 +2647,8 @@ snapshots:
 
   package-json-from-dist@1.0.1: {}
 
+  papaparse@5.4.1: {}
+
   parent-module@1.0.1:
     dependencies:
       callsites: 3.1.0
@@ -2960,6 +2988,8 @@ snapshots:
 
   typescript@5.6.3: {}
 
+  undici-types@6.19.8: {}
+
   update-browserslist-db@1.1.1(browserslist@4.24.2):
     dependencies:
       browserslist: 4.24.2
@@ -2972,17 +3002,18 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  vite@5.4.10:
+  vite@5.4.10(@types/node@22.8.6):
     dependencies:
       esbuild: 0.21.5
       postcss: 8.4.47
       rollup: 4.24.1
     optionalDependencies:
+      '@types/node': 22.8.6
       fsevents: 2.3.3
 
-  vitefu@1.0.3(vite@5.4.10):
+  vitefu@1.0.3(vite@5.4.10(@types/node@22.8.6)):
     optionalDependencies:
-      vite: 5.4.10
+      vite: 5.4.10(@types/node@22.8.6)
 
   vt-pbf@3.1.3:
     dependencies:

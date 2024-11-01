@@ -11,7 +11,10 @@
 				container: 'map',
 				style: 'https://tiles.openfreemap.org/styles/liberty',
 				center: [0, 0],
-				zoom: 4.5
+				zoom: 4.5,
+				attributionControl: {
+					compact: true
+				}
 			});
 		}
 	});
