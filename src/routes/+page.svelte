@@ -14,7 +14,7 @@
 	const LAYER_ID = 'province-extrusion';
 	const COLOR_DIVIDER = 75_000_000;
 	const HEIGHT_DIVIDER = 50;
-	const TIMEOUT = 200;
+	const TIMEOUT = 50;
 
 	let map = $state<TMap>();
 	let indonesiaGeoJSON = $state<FeatureCollection>();
@@ -31,10 +31,13 @@
 			.setLngLat(center)
 			.setHTML(
 				`
-					<div class="font-bold text-xl mb-2">
-						${name} (${year})
+					<div class="font-bold text-right text-xl">
+						${name}
 					</div>
-					<div class="text-lg">
+					<div class="text-xs text-right mb-2">
+						${year}
+					</div>
+					<div class="text-right text-sm">
 						${Intl.NumberFormat().format(value)}
 					</div>
 				`
@@ -84,7 +87,7 @@
 		popup = new Popup({
 			closeButton: false,
 			closeOnClick: false,
-			className: 'bg-white/50 p-3 rounded-md shadow-md backdrop-blur-lg text-black/75'
+			className: 'bg-black/25 p-3 rounded-md shadow-md backdrop-blur-lg text-white'
 		});
 	});
 
@@ -131,7 +134,6 @@
 				type: 'geojson',
 				data: indonesiaGeoJSON as FeatureCollection
 			},
-
 			paint: {
 				'fill-extrusion-color': [
 					'rgb',
@@ -140,8 +142,8 @@
 					0
 				],
 				'fill-extrusion-height': ['/', ['get', `${selectedYear}`], HEIGHT_DIVIDER],
-				'fill-extrusion-base': 0,
-				'fill-extrusion-opacity': 0.9
+				'fill-extrusion-base': 100,
+				'fill-extrusion-opacity': 0.75
 			}
 		});
 		map?.on('mousemove', LAYER_ID, onMouseMove);
@@ -172,21 +174,21 @@
 <Map {onMapReady} />
 
 <div
-	class={'fixed bottom-4 left-4 z-10 w-96 ' +
-		' flex flex-col justify-between gap-2 rounded-lg bg-white/50 p-4 pt-2 backdrop-blur-lg'}
+	class={'fixed bottom-4 left-4 z-10 w-60 ' +
+		' flex flex-col justify-between gap-3 rounded-lg bg-black/25 p-4 pt-2 backdrop-blur-lg'}
 >
-	<div class="font-semibold text-black/75">{selectedYear}</div>
+	<div class="text-white drop-shadow-lg">{selectedYear}</div>
 	<input
 		type="range"
 		bind:value={selectedYear}
 		min={Math.min(...years)}
 		max={Math.max(...years)}
-		class={'h-2 w-full cursor-pointer appearance-none rounded-lg bg-white ' +
+		class={'h-1 w-full cursor-pointer appearance-none rounded-lg bg-white ' +
 			' transition-all focus:outline-0 ' +
-			' [&::-webkit-slider-thumb]:h-4 [&::-webkit-slider-thumb]:appearance-none ' +
-			' [&::-webkit-slider-thumb]:w-4 [&::-webkit-slider-thumb]:rounded-full ' +
+			' [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:appearance-none ' +
+			' [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:rounded-full ' +
 			' [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:shadow-sm ' +
-			' [&::-webkit-slider-thumb]:border-4 [&::-webkit-slider-thumb]:border-solid [&::-webkit-slider-thumb]:border-red-500 [&::-webkit-slider-thumb]:shadow-slate-500'}
+			' [&::-webkit-slider-thumb]:border-4 [&::-webkit-slider-thumb]:border-solid [&::-webkit-slider-thumb]:border-slate-400 [&::-webkit-slider-thumb]:shadow-slate-500'}
 	/>
 </div>
 
@@ -200,6 +202,24 @@
 
 		.maplibregl-popup-tip {
 			display: none;
+		}
+
+		.maplibregl-ctrl-group {
+			background: rgba(0, 0, 0, 0.5);
+			backdrop-filter: blur(1em);
+		}
+
+		.maplibregl-ctrl-group button + button {
+			border: none;
+		}
+
+		.maplibregl-ctrl-attrib.maplibregl-compact {
+			background: rgba(0, 0, 0, 0.5);
+			backdrop-filter: blur(1em);
+		}
+
+		.maplibregl-ctrl-attrib-inner {
+			color: rgba(255, 255, 255, 0.5);
 		}
 	}
 </style>
