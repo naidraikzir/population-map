@@ -6,7 +6,8 @@
 	import turfCenter from '@turf/center';
 	import Map from '$lib/Map.svelte';
 	import csv from '$lib/populasi.csv?raw';
-	import { debounce } from '$lib/utils';
+
+	type ProvinsiData = Record<string, string | number>;
 
 	const indoGeoJsonUrl =
 		'https://raw.githubusercontent.com/eppofahmi/geojson-indonesia/refs/heads/master/provinsi/all_maps_state_indo.geojson';
@@ -14,36 +15,20 @@
 	const LAYER_ID = 'province-extrusion';
 	const COLOR_DIVIDER = 75_000_000;
 	const HEIGHT_DIVIDER = 50;
-	const TIMEOUT = 50;
 
 	let map = $state<TMap>();
 	let indonesiaGeoJSON = $state<FeatureCollection>();
 	let years = $state<number[]>([]);
-	let selectedYear = $state<number>();
+	let selectedYear = $state<number>(0);
 	let dataBuilt = $state(false);
 	let readyToDraw = $derived(!!map && dataBuilt);
 	let extrusionAdded = $state(false);
 	let popup = $state<Popup>();
-
-	const debouncedPopup = debounce((name, year, center, value) => {
-		if (!map || !popup) return;
-		popup
-			.setLngLat(center)
-			.setHTML(
-				`
-					<div class="font-bold text-right text-xl">
-						${name}
-					</div>
-					<div class="text-xs text-right mb-2">
-						${year}
-					</div>
-					<div class="text-right text-sm">
-						${Intl.NumberFormat().format(value)}
-					</div>
-				`
-			)
-			.addTo(map);
-	}, TIMEOUT);
+	let popupIsOpen = $state(false);
+	let highlighted = $state({
+		name: '',
+		value: 0
+	});
 
 	$effect(() => {
 		fetchIndonesiaGeoJSON();
@@ -56,11 +41,12 @@
 				number
 			];
 			map?.on('moveend', addExtrusion);
+			const zoom = window.innerWidth > window.innerHeight ? 4.5 : 4;
 			map?.flyTo({
 				speed: 1.5,
 				pitch: 25,
 				center,
-				zoom: 4.5,
+				zoom,
 				essential: true,
 				easing: (t) => (t < 0.5 ? 8 * t * t * t * t : 1 - 8 * --t * t * t * t)
 			});
@@ -84,15 +70,14 @@
 	});
 
 	$effect(() => {
-		popup = new Popup({
-			closeButton: false,
-			closeOnClick: false,
-			className: 'bg-black/25 p-3 rounded-md shadow-md backdrop-blur-lg text-white'
-		});
+		if (popupIsOpen) {
+			updatePopup();
+		}
 	});
 
 	function onMapReady(m: TMap) {
 		map = m;
+		initPopup();
 	}
 
 	async function fetchIndonesiaGeoJSON() {
@@ -106,7 +91,7 @@
 		years = headers[0].slice(1).map((y) => Number(y));
 		selectedYear = years[0];
 
-		const { data }: { data: { Provinsi: string }[] } = papaparse.parse(csv, {
+		const { data }: { data: ProvinsiData[] } = papaparse.parse(csv, {
 			header: true,
 			dynamicTyping: true
 		});
@@ -117,7 +102,8 @@
 				...feature,
 				properties: {
 					...feature.properties,
-					...(data.find((d) => d.Provinsi.toUpperCase() === feature.properties?.name) || {})
+					...(data.find((d) => (d.Provinsi as string).toUpperCase() === feature.properties?.name) ||
+						{})
 				}
 			}))
 		} as FeatureCollection;
@@ -154,20 +140,69 @@
 	function onMouseMove(e: any) {
 		if (!map || !popup || !selectedYear) return;
 		map.getCanvas().style.cursor = 'pointer';
-		const name = e.features[0].properties.Provinsi;
-		const value = e.features[0].properties[selectedYear];
-		const center = turfCenter(e.features[0].geometry as FeatureCollection)?.geometry
-			.coordinates as [number, number];
-		debouncedPopup(name, selectedYear, center, value);
+		highlighted.name = e.features[0].properties.Provinsi;
+		highlighted.value = e.features[0].properties[selectedYear];
+		showPopup(highlighted.name, selectedYear, highlighted.value);
 	}
 
 	function onMouseLeave() {
 		if (!map) return;
 		map.getCanvas().style.cursor = '';
-		setTimeout(() => {
-			if (!popup) return;
-			popup.remove();
-		}, TIMEOUT + 50);
+		if (!popup) return;
+		popup.remove();
+	}
+
+	function initPopup() {
+		popup = new Popup({
+			closeButton: false,
+			closeOnClick: false,
+			className: 'bg-black/25 p-3 rounded-md shadow-md backdrop-blur-lg text-white'
+		})
+			.trackPointer()
+			.on('open', () => {
+				popupIsOpen = true;
+			})
+			.on('close', () => {
+				popupIsOpen = false;
+			});
+	}
+
+	function showPopup(name: string, year: number, value: number) {
+		if (!map || !popup) return;
+		popup
+			.setHTML(
+				`
+					<div class="font-bold text-right text-xl">
+						${name}
+					</div>
+					<div class="text-xs text-right mb-2">
+						${year}
+					</div>
+					<div class="text-right text-sm">
+						${Intl.NumberFormat().format(value)}
+					</div>
+				`
+			)
+			.setMaxWidth('auto')
+			.addTo(map);
+	}
+
+	function updatePopup() {
+		if (!popup) return;
+		const provinsi = indonesiaGeoJSON?.features.find(
+			(f) => f.properties?.Provinsi === highlighted.name
+		);
+		popup.setHTML(`
+			<div class="font-bold text-right text-xl">
+				${highlighted.name}
+			</div>
+			<div class="text-xs text-right mb-2">
+				${selectedYear}
+			</div>
+			<div class="text-right text-sm">
+				${Intl.NumberFormat().format(provinsi?.properties?.[selectedYear])}
+			</div>
+		`);
 	}
 </script>
 
@@ -188,7 +223,8 @@
 			' [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:appearance-none ' +
 			' [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:rounded-full ' +
 			' [&::-webkit-slider-thumb]:bg-white [&::-webkit-slider-thumb]:shadow-sm ' +
-			' [&::-webkit-slider-thumb]:border-4 [&::-webkit-slider-thumb]:border-solid [&::-webkit-slider-thumb]:border-slate-400 [&::-webkit-slider-thumb]:shadow-slate-500'}
+			' [&::-webkit-slider-thumb]:border-4 [&::-webkit-slider-thumb]:border-solid ' +
+			' [&::-webkit-slider-thumb]:border-slate-400 [&::-webkit-slider-thumb]:shadow-slate-500'}
 	/>
 </div>
 
