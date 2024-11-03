@@ -51,8 +51,8 @@
 		if (extrusionAdded) {
 			map?.setPaintProperty(LAYER_ID, 'fill-extrusion-color', [
 				'rgb',
-				['*', 255, ['/', ['get', `${selectedYear}`], COLOR_DIVIDER]],
-				['-', 255, ['*', 255, ['/', ['get', `${selectedYear}`], COLOR_DIVIDER]]],
+				['*', 150, ['/', ['get', `${selectedYear}`], COLOR_DIVIDER]],
+				['-', 150, ['*', 150, ['/', ['get', `${selectedYear}`], COLOR_DIVIDER]]],
 				0
 			]);
 			map?.setPaintProperty(LAYER_ID, 'fill-extrusion-height', [
@@ -113,22 +113,11 @@
 			source: {
 				type: 'geojson',
 				data: indonesiaGeoJSON as FeatureCollection
-			},
-			paint: {
-				'fill-extrusion-color': [
-					'rgb',
-					['*', 255, ['/', ['get', `${selectedYear}`], COLOR_DIVIDER]],
-					['-', 255, ['*', 255, ['/', ['get', `${selectedYear}`], COLOR_DIVIDER]]],
-					0
-				],
-				'fill-extrusion-height': ['/', ['get', `${selectedYear}`], HEIGHT_DIVIDER],
-				'fill-extrusion-base': 100,
-				'fill-extrusion-opacity': 0.75
 			}
 		});
+		extrusionAdded = true;
 		map?.on('mousemove', LAYER_ID, onMouseMove);
 		map?.on('mouseleave', LAYER_ID, onMouseLeave);
-		extrusionAdded = true;
 	}
 
 	function onMouseMove(e: any) {
@@ -203,7 +192,7 @@
 <Map {onMapReady} />
 
 <div
-	class={'fixed bottom-4 left-4 z-10 w-60 ' +
+	class={'fixed bottom-[0.5rem] left-[0.5rem] z-10 w-60 ' +
 		' flex flex-col justify-between gap-3 rounded-lg bg-black/25 p-4 pt-2 backdrop-blur-lg'}
 	role="slider"
 	aria-valuenow={selectedYear}
@@ -211,7 +200,7 @@
 	onclick={(e) => e.stopPropagation()}
 	onkeydown={(e) => e.stopPropagation()}
 >
-	<div class="text-white drop-shadow-lg">{selectedYear}</div>
+	<div class="text-white drop-shadow-lg">{selectedYear}'s Population</div>
 	<input
 		type="range"
 		bind:value={selectedYear}
@@ -227,7 +216,7 @@
 	/>
 </div>
 
-<style>
+<style lang="postcss">
 	:global {
 		.maplibregl-popup-content {
 			background: transparent;
@@ -240,8 +229,7 @@
 		}
 
 		.maplibregl-ctrl-group {
-			background: rgba(0, 0, 0, 0.5);
-			backdrop-filter: blur(1em);
+			@apply bg-black/25 backdrop-blur-lg;
 		}
 
 		.maplibregl-ctrl-group button + button {
@@ -249,12 +237,11 @@
 		}
 
 		.maplibregl-ctrl-attrib.maplibregl-compact {
-			background: rgba(0, 0, 0, 0.5);
-			backdrop-filter: blur(1em);
+			@apply bg-black/25 backdrop-blur-lg;
 		}
 
 		.maplibregl-ctrl-attrib-inner {
-			color: rgba(255, 255, 255, 0.5);
+			@apply text-white/50;
 		}
 	}
 </style>
