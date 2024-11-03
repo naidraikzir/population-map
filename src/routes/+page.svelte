@@ -1,9 +1,9 @@
 <script lang="ts">
 	import type { FeatureCollection } from 'geojson';
-	import type { Map as TMap } from 'maplibre-gl';
+	import type { Map as TMap, LngLatBoundsLike } from 'maplibre-gl';
 	import { Popup } from 'maplibre-gl';
 	import papaparse from 'papaparse';
-	import turfCenter from '@turf/center';
+	import turfBbox from '@turf/bbox';
 	import Map from '$lib/Map.svelte';
 	import csv from '$lib/populasi.csv?raw';
 
@@ -36,17 +36,11 @@
 
 	$effect(() => {
 		if (readyToDraw) {
-			const center = turfCenter(indonesiaGeoJSON as FeatureCollection)?.geometry.coordinates as [
-				number,
-				number
-			];
 			map?.on('moveend', addExtrusion);
-			const zoom = window.innerWidth > window.innerHeight ? 4.5 : 4;
-			map?.flyTo({
+			const envelope = turfBbox(indonesiaGeoJSON as FeatureCollection) as LngLatBoundsLike;
+			map?.fitBounds(envelope, {
 				speed: 1.5,
 				pitch: 25,
-				center,
-				zoom,
 				essential: true,
 				easing: (t) => (t < 0.5 ? 8 * t * t * t * t : 1 - 8 * --t * t * t * t)
 			});
@@ -211,6 +205,11 @@
 <div
 	class={'fixed bottom-4 left-4 z-10 w-60 ' +
 		' flex flex-col justify-between gap-3 rounded-lg bg-black/25 p-4 pt-2 backdrop-blur-lg'}
+	role="slider"
+	aria-valuenow={selectedYear}
+	tabindex={0}
+	onclick={(e) => e.stopPropagation()}
+	onkeydown={(e) => e.stopPropagation()}
 >
 	<div class="text-white drop-shadow-lg">{selectedYear}</div>
 	<input
