@@ -4,6 +4,7 @@
 	import { Popup } from 'maplibre-gl';
 	import papaparse from 'papaparse';
 	import turfBbox from '@turf/bbox';
+	import Github from '$lib/Github.svelte';
 	import Map from '$lib/Map.svelte';
 	import csv from '$lib/populasi.csv?raw';
 
@@ -215,6 +216,13 @@
 			' [&::-webkit-slider-thumb]:border-slate-400 [&::-webkit-slider-thumb]:shadow-slate-500'}
 	/>
 </div>
+
+<a
+	href="https://github.com/naidraikzir/population-map"
+	class="fixed left-[0.5rem] top-[0.5rem] h-32 w-32 text-white"
+>
+	<Github />
+</a>
 
 <style lang="postcss">
 	:global {
