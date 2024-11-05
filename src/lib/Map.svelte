@@ -3,9 +3,13 @@
 	import 'maplibre-theme/icons.lucide.css';
 	import 'maplibre-theme/modern.css';
 
+	type Props = {
+		onMapReady: (m: TMap) => void;
+	};
+
 	let div: HTMLDivElement;
-	let { onMapReady }: { onMapReady: (m: TMap) => void } = $props();
-	let mapView = $state<TMap>();
+	let { onMapReady }: Props = $props();
+	let mapView = $state() as TMap;
 
 	$effect(() => {
 		if (div) {
@@ -22,17 +26,15 @@
 	});
 
 	$effect(() => {
-		if (mapView) {
-			mapView.addControl(
-				new maplibre.NavigationControl({
-					visualizePitch: true
-				})
-			);
+		mapView.addControl(
+			new maplibre.NavigationControl({
+				visualizePitch: true
+			})
+		);
 
-			mapView.on('load', () => {
-				onMapReady(mapView as TMap);
-			});
-		}
+		mapView.on('load', () => {
+			onMapReady(mapView);
+		});
 	});
 </script>
 

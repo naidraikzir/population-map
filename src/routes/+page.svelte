@@ -17,14 +17,14 @@
 	const COLOR_DIVIDER = 75_000_000;
 	const HEIGHT_DIVIDER = 50;
 
-	let map = $state<TMap>();
+	let map = $state() as TMap;
 	let indonesiaGeoJSON = $state<FeatureCollection>();
-	let years = $state<number[]>([]);
-	let selectedYear = $state<number>(0);
+	let years = $state([]) as number[];
+	let selectedYear = $state(0);
 	let dataBuilt = $state(false);
 	let readyToDraw = $derived(!!map && dataBuilt);
 	let extrusionAdded = $state(false);
-	let popup = $state<Popup>();
+	let popup = $state() as Popup;
 	let popupIsOpen = $state(false);
 	let highlighted = $state({
 		name: '',
@@ -38,8 +38,8 @@
 	$effect(() => {
 		if (readyToDraw) {
 			map?.on('moveend', addExtrusion);
-			const envelope = turfBbox(indonesiaGeoJSON as FeatureCollection) as LngLatBoundsLike;
-			map?.fitBounds(envelope, {
+			const bbox = turfBbox(indonesiaGeoJSON as FeatureCollection) as LngLatBoundsLike;
+			map?.fitBounds(bbox, {
 				speed: 1.5,
 				pitch: 25,
 				essential: true,
@@ -122,7 +122,6 @@
 	}
 
 	function onMouseMove(e: any) {
-		if (!map || !popup || !selectedYear) return;
 		map.getCanvas().style.cursor = 'pointer';
 		highlighted.name = e.features[0].properties.Provinsi;
 		highlighted.value = e.features[0].properties[selectedYear];
@@ -130,9 +129,7 @@
 	}
 
 	function onMouseLeave() {
-		if (!map) return;
 		map.getCanvas().style.cursor = '';
-		if (!popup) return;
 		popup.remove();
 	}
 
@@ -152,7 +149,6 @@
 	}
 
 	function showPopup(name: string, year: number, value: number) {
-		if (!map || !popup) return;
 		popup
 			.setHTML(
 				`
@@ -172,7 +168,6 @@
 	}
 
 	function updatePopup() {
-		if (!popup) return;
 		const provinsi = indonesiaGeoJSON?.features.find(
 			(f) => f.properties?.Provinsi === highlighted.name
 		);
